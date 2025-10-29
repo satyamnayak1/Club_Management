@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+  <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+   <style type="">
+	*{
+	  box-sizing: border-box;
+	  margin: 0;
+	  padding: 0;
+    }
+	.container{
+	  max-width:1200px;
+	  margin: 0 auto;
+	}
+	body{
+	  font-family: 'Poppins',sans-serif;
+	  font-weight: 400;
+	  line-height: 1.5;
+	  color: #030712;
+	}
+	h1{
+	  font-weight: 500;
+	}
+	h3{
+	  margin-bottom: 15px;
+	}
+	.signin{
+	  max-width: 500px;
+	  max-height: 700px;
+	}
+	.header{
+	  display: flex;
+	  flex-direction: row;
+	  justify-content: space-between;
+	  gap: 60px;
+	  padding: 10px 20px;
+	}
+	.btn{
+	  width: 100%;
+	  height: 50px;
+	  display: flex;
+	  flex-direction: row;
+	  justify-content: center;
+	  align-items: center;
+	}
+	.div{
+	  width: 100%;
+	}
+	.form{
+	  display: flex;
+	  flex-direction: column;
+	  padding: 10px 20px;
+	  
+	}
+	input{
+	  width: 100%;
+	  max-width: 100%;
+	  height: 50px;
+	}
+	.span{
+	  text-transform: uppercase;
+	  font-weight: 700;
+	  font-size: 18px; 
+	}
+	
+	.input{
+	  margin-bottom: 10px;
+	}
+   
+   </style>
+  <title>Register</title>
+</head>
+<body>
+  <div class="signin">
+    <div class="header">
+      <div>
+        <h1>Register</h1>
+      </div>
+      <div>
+        <h1>X</h1>
+      </div>
+    </div>
+
+
+    <div>     
+      <form action="" id="registerForm" class="form">
+
+        <h3>Register to become an member of LYC</h3>
+        
+        <label for="userName" >User Name</label>
+        <div class="input">
+          <input id="userName" class="form-input"  type="text" placeholder="UserName">
+        </div>
+        
+        <label for="name">Name</label>
+        <div class="input">
+          <input id="name" class="form-input" type="text" placeholder="Name">
+        </div>
+        
+
+        <label for="password">Password</label>
+        <div class="input">
+          <input id="password" class="form-input" type="password" placeholder="Password">
+        </div>
+
+        <label for="email">Email</label>
+        <div class="input">
+          <input id="email" class="form-input"  type="text" placeholder="Email">
+        </div>
+        
+        <label for="mobileNo">Email</label>
+        <div class="input">
+          <input id="mobileNo" class="form-input"  type="text" placeholder="Email">
+        </div>
+        
+        <label for="secretId">Secret Id</label>
+        <div class="input">
+          <input id="secretId" class="form-input" type="text" placeholder="secrateId">
+        </div>
+        
+        <div class="div">
+          <button type="submit" class="btn"><span class="span">Submit</span></button>
+        </div>    
+      </form>
+    </div>
+  </div>
+
+  <div class="output">
+
+  </div>
+
+  <script>
+
+    document.querySelector(".form").addEventListener("submit", async (e)=>{
+    	
+      e.preventDefault();
+
+      const data={
+        userName: document.getElementById("userName").value,
+        name:document.getElementById("name").value,
+        password:document.getElementById("password").value,
+        mobileNo:document.getElementById("mobileNo").value,
+        email:document.getElementById("email").value,
+        secretId:document.getElementById("secretId").value
+      };
+
+      try{
+        const response= await fetch("http://localhost:8081/register",{
+          method:"POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+       });
+
+
+       if(response.ok){
+    	   
+    	const result = await response.json();
+    	console.log(result);
+        document.querySelector(".output").innerHTML=`<h1> Registration Sucessful </h1>`;
+       }
+       else{
+        document.querySelector(".output").innerHTML=`<h1> Registration Fail </h1>`;
+       }
+
+      }
+      catch (err) {
+        console.error("Request failed:", err);
+        alert("Something went wrong!");
+      }
+    });
+  </script>
+  
+</body>
+</html>

@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Page</title>
+
+  <!-- <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet"> -->
+  
+  
+  <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+  
+  <style type="text/css">
+  
+    *{
+	  box-sizing: border-box;
+	  margin: 0;
+	  padding: 0;
+	}
+	.container{
+	  max-width:1200px;
+	  margin: 0 auto;
+	  
+	}
+	
+	body{
+	  font-family: 'Poppins',sans-serif;
+	  font-weight: 400;
+	  line-height: 1.5;
+	  color: #6b7280;
+	
+	}
+	.word{
+	  text-transform: uppercase ;
+	}
+	
+	
+	p{
+	  text-align: center;
+	  font-size: 20px;
+	}
+	h1,h2,h3,h4{
+	  font-weight: 700;
+	  line-height: 1.2;
+	  letter-spacing: -2px;
+	  color:#111827;
+	}
+	h1{
+	  
+	  text-align: center;
+	  font-size: 62px;
+	}
+	h3{
+	  font-size: 32px;
+	}
+	
+	
+	a{
+	  text-decoration: none;
+	  font-size: 16px;
+	  display: inline-block;
+	}
+	ul{
+	  list-style: none;
+	}
+	.btn{
+	  font-weight: 400;
+	  padding: 15px 30px;
+	
+	}
+	.btn-primary:link,.btn-primary:visited{
+	  /* color: #9ca3af; */
+	  color: #6b7280;
+	}
+	
+	.btn-primary:hover,.btn-primary:active{
+	  color: #030712;
+	}
+	
+	
+	
+	.btn-secondary:link,.btn-secondary:visited{
+	  /* color: #9ca3af; */
+	  color: #6b7280;
+	 
+	  
+	}
+	
+	
+	.btn-secondary:hover,.btn-secondary:target{
+	  color: #030712;
+	  /* background-color: #030712;
+	   */
+	  
+	}
+	.set-width{
+	  width: 300px;
+	  /* text-align: center; */
+	  /* padding: 15px 30px; */
+	  border: 2px solid #030712;
+	  color: white;
+	  /* background-color: #030712; */
+	}
+	
+	.main-section{
+	  text-align: center;
+	  display: flex;
+	  flex-direction: column;
+	  justify-content: center;
+	  align-items: center;
+	  border-bottom: 1px solid #6b7280 ;
+	  /* max-height: 100px; */
+	  /* height: 50px; */
+	  
+	
+	  /* padding: 15px 30px; */
+	}
+	.text-sec{
+	  display: flex;
+	  /* //align-items: center; */
+	  justify-content: center;
+	  align-items: center;
+	  min-height: 80vh;
+	}
+	.hero-section{
+	  text-align: center;
+	
+	}
+	
+	.pic-sec{
+	  display: flex;
+	  flex-direction: column;
+	  gap: 10px;
+	}
+	.heading-sec{
+	  display: flex;
+	  flex-direction: column;
+	  align-items: start;
+	}
+	.timg-sec{
+	  display: grid;
+	  grid-template-columns: 1fr 1fr;
+	}
+	.button-sec{
+	  padding: 0%;
+	  display: flex;
+	  flex-direction: column;
+	  align-items: center;
+	  gap: 10px;
+	}
+	/* .features-main-heading{
+	
+	} */
+	.social-icons{
+	  width: 25px;
+	}
+	.main-img{
+	  height: 500px;
+	  max-width:1200px;
+	}
+	.sub-img{
+	  max-width:500px;
+	}
+	/* .cta-section{
+	  width: 1000px;
+	  padding: 50px 100px ;
+	} */
+	.nav-sec{
+	  padding: 8px 16px;
+	  /* border: 2px solid #6b7280; */
+	  border-top: 1px solid #9ca3af;
+	  border-bottom: 1px solid #9ca3af ;
+	}
+	.header{
+	  margin-top: 10px;
+	}
+	.footer{
+	  text-align: center;
+	}
+	.nav-bar{
+	  display: flex;
+	  justify-content: space-between;
+	  flex-direction: row;
+	}
+	.nav-align{
+	  display: flex;
+	  flex-direction: row;
+	  justify-content: center;
+	  align-items: center;
+	  gap: 30px;
+	
+	}
+	.nav-svg{
+	  display: flex;
+	  gap: 20px;
+	  flex-direction: row;
+	}
+	
+	.logo-icon{
+	  display: flex;
+	  flex-direction: row;
+	  justify-content: space-between;
+	}
+	.icon-sec{
+	  display: flex;
+	  flex-direction: row;
+	  justify-content: space-evenly;
+	  gap: 20px;
+	}
+	.card-section{
+	margin-bottom: 100px;
+	}
+	.main{
+	  margin-bottom: 100px;
+	}
+	.btn{
+	  border: none;        /* removes the border */
+	  background: none;    /* removes background color */
+	  outline: none;       /* removes focus outline */
+	  box-shadow: none;    /* removes any shadow */
+	  color: inherit;      /* makes text use parent color */
+	  font: inherit;       /* inherit font style */
+	  cursor: pointer;     /* keeps the pointer effect */
+	  padding: 0;          /* remove default padding */
+	  text-transform: uppercase;
+	  
+	
+	}
+	.btn:link,btn:visited{
+	  color: #3f3f46;
+	}
+	.btn:hover,btn:active{
+	  color: #030712;
+	}
+	
+	.ul{
+	  display: flex;
+	  flex-direction: row;
+	  gap: 15px;
+	}
+	
+	
+	/* sr-only is a common class for screen readers to hide content visually */
+	.sr-only {
+	  position: absolute;
+	  width: 1px;
+	  height: 1px;
+	  padding: 0;
+	  margin: -1px;
+	  overflow: hidden;
+	  clip: rect(0, 0, 0, 0);
+	  white-space: nowrap;
+	  border-width: 0;
+	}
+	
+	/* Base styles for the entire pagination component */
+	.pagination-container {
+	  display: flex;
+	  align-items: center;
+	  justify-content: space-between;
+	  border-top: 1px solid #e5e7eb;
+	  background-color: #fff;
+	  padding: 0.75rem 1rem; /* px-4 py-3 */
+	}
+	
+	/* Styles for the mobile view (visible by default) */
+	.pagination-mobile {
+	  display: flex;
+	  flex: 1;
+	  justify-content: space-between;
+	}
+	
+	.pagination-btn {
+	  position: relative;
+	  display: inline-flex;
+	  align-items: center;
+	  border: 1px solid #d1d5db;
+	  border-radius: 0.375rem; /* rounded-md */
+	  background-color: #fff;
+	  padding: 0.5rem 1rem; /* px-4 py-2 */
+	  font-size: 0.875rem; /* text-sm */
+	  font-weight: 500; /* font-medium */
+	  color: #4b5563; /* text-gray-700 */
+	  text-decoration: none;
+	}
+	
+	.pagination-btn + .pagination-btn {
+	  margin-left: 0.75rem; /* ml-3 */
+	}
+	
+	.pagination-btn:hover {
+	  background-color: #f9fafb; /* hover:bg-gray-50 */
+	}
+	
+	/* Styles for the desktop view (hidden by default) */
+	.pagination-desktop {
+	  display: none; /* hidden */
+	  flex: 1;
+	  align-items: center;
+	  justify-content: space-between;
+	}
+	
+	.pagination-info {
+	  font-size: 0.875rem; /* text-sm */
+	  color: #4b5563; /* text-gray-700 */
+	}
+	
+	.pagination-info .font-medium {
+	  font-weight: 500;
+	}
+	
+	.pagination-nav {
+	  display: inline-flex;
+	  border-radius: 0.375rem; /* rounded-md */
+	  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-xs */
+	}
+	
+	.pagination-nav-item {
+	  position: relative;
+	  display: inline-flex;
+	  align-items: center;
+	  font-size: 0.875rem;
+	  font-weight: 600; /* font-semibold */
+	  padding: 0.5rem 1rem;
+	  color: #111827; /* text-gray-900 */
+	  border: 1px solid #d1d5db; /* inset-ring-gray-300 */
+	  background-color: #fff;
+	  text-decoration: none;
+	  z-index: 10; /* z-10 */
+	}
+	
+	.pagination-nav-item:hover {
+	  background-color: #f9fafb; /* hover:bg-gray-50 */
+	}
+	
+	.pagination-nav-item:focus {
+	  z-index: 20; /* focus:z-20 */
+	  outline: 2px solid #4f46e5;
+	  outline-offset: -2px;
+	}
+	
+	.pagination-nav-item.current-page {
+	  z-index: 10;
+	  background-color: #4f46e5; /* bg-indigo-600 */
+	  color: #fff; /* text-white */
+	  border-color: #4f46e5;
+	}
+	
+	.pagination-nav-item.rounded-l {
+	  border-top-left-radius: 0.375rem;
+	  border-bottom-left-radius: 0.375rem;
+	}
+	
+	.pagination-nav-item.rounded-r {
+	  border-top-right-radius: 0.375rem;
+	  border-bottom-right-radius: 0.375rem;
+	}
+	
+	.pagination-nav-item:not(:first-child) {
+	  margin-left: -1px; /* -space-x-px */
+	}
+	
+	.pagination-ellipsis {
+	  position: relative;
+	  display: inline-flex;
+	  align-items: center;
+	  font-size: 0.875rem;
+	  font-weight: 600;
+	  color: #4b5563;
+	  padding: 0.5rem 1rem;
+	  border: 1px solid #d1d5db;
+	  z-index: 10;
+	}
+	
+	.icon {
+	  width: 1.25rem; /* size-5 */
+	  height: 1.25rem;
+	  color: #9ca3af; /* text-gray-400 */
+	}
+	
+	/* Hide some items on small screens (md) */
+	.hidden-on-mobile {
+	  display: none;
+	}
+	
+	/* Media query for larger screens (sm) */
+	@media (min-width: 640px) {
+	  .pagination-mobile {
+	    display: none;
+	  }
+	
+	  .pagination-desktop {
+	    display: flex;
+	  }
+	}
+	
+	/* Media query for medium screens (md) */
+	@media (min-width: 768px) {
+	  .hidden-on-mobile {
+	    display: inline-flex;
+	  }
+    }
+    /* Style for the container holding the member cards */
+/* Style for the container holding the member cards */
+.members-container {
+    display: flex;
+    flex-direction: column; /* This is the key change: stacks items vertically */
+    gap: 20px; /* Space between each card */
+    align-items: center; /* Centers the cards horizontally */
+    padding: 20px;
+}
+
+/* Style for the container holding the member cards */
+.members-container {
+    display: flex;
+    flex-direction: column; /* Stacks cards vertically */
+    gap: 20px; /* Space between each card */
+    align-items: center; /* Centers the cards horizontally on the page */
+    padding: 20px;
+}
+
+/* Style for each individual member card */
+.member-card {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    width: 90%; /* Reduces width slightly to not fill the entire page */
+    max-width: 800px; /* Sets a maximum width for large screens */
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Add a hover effect for better user interaction */
+.member-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Style for the member details container */
+.member-details {
+    display: flex; /* This is the key change: uses flexbox for a single line */
+    justify-content: space-between; /* Pushes items to the ends with space in between */
+    align-items: center; /* Vertically aligns the text */
+    flex-wrap: wrap; /* Allows wrapping on smaller screens */
+    gap: 15px; /* Adds space between the items */
+}
+
+/* Style for the individual text elements */
+.member-details p {
+    margin: 0; /* Removes default paragraph margin */
+    font-size: 14px;
+    color: #333;
+    white-space: nowrap; /* Prevents text from wrapping */
+}
+
+.member-details .member-name {
+    font-weight: bold;
+    font-size: 16px;
+    color: #007bff;
+}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="nav-sec">
+        <nav>
+          <div class="nav-bar">
+            <div class="nav-align">
+              <div>
+                <a href="">Logo <img src="" alt="" ></a>
+              </div>
+              <div>
+                <ul class="ul">
+                <li><button type='button' class="btn">Fund</button></li>
+                <li><button type='button' class="btn">Event</button></li>
+                <li><button type='button' class="btn" id="showall">Show Members</button></li>
+              </ul>
+              </div>
+            </div>
+
+            <div class="nav-align">
+              <ul class="nav-svg">
+                <li><a href=""><img src="images/poutline.svg"  width="50px" height="50px" alt=""></a></li>
+                <li><a href=""><img src="images/outline.svg" width="50px" height="50px" alt=""></a></li>
+              </ul>
+
+            </div>
+
+          </div>
+          
+          
+        </nav>
+      </div>
+
+    </header>
+
+    <main class="main">
+      <section>
+
+        <div class="page">
+
+          <span class="page-info"></span>
+          <span class="page-info"></span>
+          <span class="page-info"></span>
+
+        </div>
+
+        <div id="members-container" class="members-container">
+
+        </div>
+        <div class="pagination-container">
+          <div class="pagination-mobile">
+            <a href="#" class="pagination-btn">Previous</a>
+            <a href="#" class="pagination-btn">Next</a>
+          </div>
+          <div class="pagination-desktop">
+            <div>
+              <p class="pagination-info">
+                Showing
+                <span class="font-medium">1</span>
+                to
+                <span class="font-medium">10</span>
+                of
+                <span class="font-medium">97</span>
+                results
+              </p>
+            </div>
+            <div>
+              <nav aria-label="Pagination" class="pagination-nav">
+                <a href="#" class="pagination-nav-item rounded-l">
+                  <span class="sr-only">Previous</span>
+                  <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="icon">
+                    <path d="M11.78 5.22a.75.75 0 0 1 0 1.06L8.06 10l3.72 3.72a.75.75 0 1 1-1.06 1.06l-4.25-4.25a.75.75 0 0 1 0-1.06l4.25-4.25a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" fill-rule="evenodd" />
+                  </svg>
+                </a>
+                <a href="#" aria-current="page" class="pagination-nav-item current-page">1</a>
+                <a href="#" class="pagination-nav-item">2</a>
+                <a href="#" class="pagination-nav-item hidden-on-mobile">3</a>
+                <span class="pagination-ellipsis">...</span>
+                <a href="#" class="pagination-nav-item hidden-on-mobile">8</a>
+                <a href="#" class="pagination-nav-item">9</a>
+                <a href="#" class="pagination-nav-item">10</a>
+                <a href="#" class="pagination-nav-item rounded-r">
+                  <span class="sr-only">Next</span>
+                  <svg viewBox="0 0 20 20" fill="currentColor" data-slot="icon" aria-hidden="true" class="icon">
+                    <path d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" fill-rule="evenodd" />
+                  </svg>
+                </a>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </section>
+        
+
+    </main>
+
+
+    <footer class="footer">
+      <div class="cta-section">
+        <div class="card-section"> 
+          <div>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Repudiandae amet explicabo nisi deleniti <br>a, omnis dignissimos aliquid maxime ducimus temporibus non officiis incidunt voluptates alias fuga velit praesentium ex nesciunt!</p>
+          </div>
+        </div>
+
+        <div class="logo-icon">
+          <div>
+            <p>Logo</p>
+            <h4>Lion Youth club</h4>
+          </div>
+
+          <div>
+            <ul class="icon-sec">
+              <li><a href=""><img src="images/facebook.svg"  class="social-icons" alt=""></a></li>
+              <li><a href=""><img src="images/instagram.svg" class="social-icons" alt=""></a></li>
+              <li><a href=""><img src="images/youtube.svg"   class="social-icons" alt=""></a></li>
+              <li><a href=""><img src="images/twitter.svg"   class="social-icons" alt=""></a></li>
+              <li><a href=""><img src="images/whatsapp.svg"  class="social-icons" alt=""></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+
+  <script>
+  let currentPage = 0;
+
+//Function to fetch and render members for a given page
+const fetchAndRenderMembers = async (pageNumber) => {
+   try {
+       const token = localStorage.getItem("token");
+
+       const response = await fetch(`http://localhost:8081/show/${pageNumber}`, {
+           method: "GET",
+           headers: {
+               "Content-Type": "application/json",
+               "Authorization": `Bearer ${token}`
+           }
+       });
+
+       if (response.ok) {
+           const responseData = await response.json();
+           const membersContainer = document.querySelector('#members-container');
+           
+           // Clear previous content
+           membersContainer.innerHTML = ''; 
+
+           if (responseData.content.length > 0) {
+               responseData.content.forEach(member => {
+                   const memberDiv = document.createElement('div');
+                   memberDiv.classList.add('member-card');
+                   
+                   memberDiv.innerHTML = `
+                       <div class="member-details">
+                           <p class="member-name">${member.name}</p>
+                           <p class="member-mobile">${member.mobileNo}</p>
+                           <p class="member-dob">${member.dob}</p>
+                       </div>
+                   `;
+                   
+                   membersContainer.appendChild(memberDiv);
+               });
+           } else {
+               membersContainer.innerHTML = '<p>No members found on this page.</p>';
+           }
+
+           // Update the global currentPage variable
+           currentPage = responseData.pageNumber;
+
+           // Call new functions to update the UI
+           updatePaginationInfo(responseData);
+           updatePaginationButtons(responseData);
+           renderPageLinks(responseData);
+
+           console.log("Fetched Data:", responseData);
+           
+       } else {
+           const errorText = await response.text();
+           alert("Error: " + errorText);
+       }
+
+   } catch (err) {
+       console.error("Request failed:", err);
+       alert("Something went wrong!");
+   }
+};
+
+//Function to update the text showing pagination status
+const updatePaginationInfo = (pageData) => {
+   const totalElementsSpan = document.querySelector('.pagination-info .font-medium:nth-of-type(3)');
+   const startElementsSpan = document.querySelector('.pagination-info .font-medium:nth-of-type(1)');
+   const endElementsSpan = document.querySelector('.pagination-info .font-medium:nth-of-type(2)');
+
+   const start = (pageData.pageNumber * pageData.pageSize) + 1;
+   const end = Math.min(start + pageData.content.length - 1, pageData.totalElements);
+
+   if (totalElementsSpan) totalElementsSpan.textContent = pageData.totalElements;
+   if (startElementsSpan) startElementsSpan.textContent = start;
+   if (endElementsSpan) endElementsSpan.textContent = end;
+};
+
+//Function to enable/disable pagination buttons
+const updatePaginationButtons = (pageData) => {
+   const prevButton = document.querySelector('.pagination-mobile .pagination-btn:first-of-type');
+   const nextButton = document.querySelector('.pagination-mobile .pagination-btn:last-of-type');
+   const desktopPrev = document.querySelector('.pagination-desktop .rounded-l');
+   const desktopNext = document.querySelector('.pagination-desktop .rounded-r');
+
+   // Disable prev button if on the first page
+   if (pageData.pageNumber === 0) {
+       prevButton.style.opacity = '0.5';
+       prevButton.style.cursor = 'not-allowed';
+       desktopPrev.style.opacity = '0.5';
+       desktopPrev.style.cursor = 'not-allowed';
+   } else {
+       prevButton.style.opacity = '1';
+       prevButton.style.cursor = 'pointer';
+       desktopPrev.style.opacity = '1';
+       desktopPrev.style.cursor = 'pointer';
+   }
+
+   // Disable next button if on the last page
+   if (pageData.last) {
+       nextButton.style.opacity = '0.5';
+       nextButton.style.cursor = 'not-allowed';
+       desktopNext.style.opacity = '0.5';
+       desktopNext.style.cursor = 'not-allowed';
+   } else {
+       nextButton.style.opacity = '1';
+       nextButton.style.cursor = 'pointer';
+       desktopNext.style.opacity = '1';
+       desktopNext.style.cursor = 'pointer';
+   }
+};
+
+//NEW FUNCTION: Dynamically renders page links
+const renderPageLinks = (pageData) => {
+   const navContainer = document.querySelector('.pagination-desktop .pagination-nav');
+   // Clear existing links except for the prev/next buttons
+   const navItems = navContainer.querySelectorAll('a, span');
+   navItems.forEach(item => {
+       if (!item.classList.contains('rounded-l') && !item.classList.contains('rounded-r')) {
+           item.remove();
+       }
+   });
+
+   // Create and insert new links
+   for (let i = 0; i < pageData.totalPages; i++) {
+       const pageLink = document.createElement('a');
+       pageLink.href = '#';
+       pageLink.classList.add('pagination-nav-item');
+       pageLink.textContent = i + 1;
+
+       if (i === pageData.pageNumber) {
+           pageLink.classList.add('current-page');
+           pageLink.setAttribute('aria-current', 'page');
+       }
+
+       pageLink.addEventListener('click', (e) => {
+           e.preventDefault();
+           fetchAndRenderMembers(i);
+       });
+
+       // Insert the new page link before the 'Next' button
+       const nextButton = document.querySelector('.pagination-desktop .rounded-r');
+       navContainer.insertBefore(pageLink, nextButton);
+   }
+};
+
+//Event listener for the "Show Members" button to start the process
+document.querySelector('#showall').addEventListener('click', (e) => {
+   e.preventDefault();
+   currentPage = 0; // Reset to page 0 when "Show Members" is clicked
+   fetchAndRenderMembers(currentPage);
+});
+
+//Event listener for the "Previous" button
+document.querySelector('.pagination-desktop .rounded-l').addEventListener('click', (e) => {
+   e.preventDefault();
+   if (currentPage > 0) {
+       fetchAndRenderMembers(currentPage - 1);
+   }
+});
+
+//Event listener for the "Next" button
+document.querySelector('.pagination-desktop .rounded-r').addEventListener('click', (e) => {
+   e.preventDefault();
+   if (!pageData.last) { // Ensure you are not on the last page
+       fetchAndRenderMembers(currentPage + 1);
+   }
+});
+  </script>
+  
+  <!-- <div class="container mx-auto px-5"> 
+    <h1>Hello World!</h1>
+  </div> -->
+</body>
+</html>
+
+

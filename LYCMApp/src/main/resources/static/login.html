@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In</title>
+
+  <style type="text/css">
+  *{
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+.container{
+  max-width: 500px;
+  max-height: 800px;
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+
+}
+
+body{
+  font-family: 'Poppins',sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #030712;
+}
+.nav{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin: 20px 10px;
+}
+.heading{
+  margin-bottom: 30px;
+}
+.img{
+  width: 20px;
+  background-color: white;
+  text-decoration: none;
+  border: none;
+}
+
+.form{
+  display: flex;
+  flex-direction: column;
+}
+.footer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+.input{
+  width: 100%;
+  margin-bottom: 30px;
+}
+.main{
+  margin: 20px 10px;
+}
+input{
+  width: 100%;
+  height: 70px;
+  border: 2px solid;
+}
+.btn{
+  height: 70px;
+  width: 100%;
+  background-color: white;
+  text-transform: uppercase;
+  font-size: 20px;
+}
+.span{
+  text-transform: uppercase;
+  text-align: center;
+}
+.text{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+  
+  </style>
+
+</head>
+<body>
+
+  <div class="container">
+    <div class="nav"> 
+        <div class="text">
+          <span class="span">Sign In</span>
+        </div>
+        <div >
+          <button type="submit"> <img class="img" src="images/cross.svg" alt=""></button>
+        </div>
+    </div>
+    <div class="main">
+        <form action="" class="form">
+          <h3 class="heading">Sign in with email and password</h5>
+          
+          <label for="userName">UserName</label>
+          <div class="input">
+            <input id="userName" type="text" placeholder="UserName">
+          </div>
+
+          <label for="password">Password</label>
+          <div class="input">
+            <input id="password" type="text" placeholder="Password">
+          </div>
+
+          <div class="btn-div">
+            <button class="btn" type="submit"><span>Continue</span></button>
+          </div>
+        </form>
+
+        <div class="footer">
+          <span>Lion Youth Club</span>
+        </div>
+    </div>
+  </div>
+
+  <script>
+
+
+
+    document.querySelector(".form").addEventListener("submit", async (e)=>{
+
+      e.preventDefault();
+
+      const data={
+        userName: document.getElementById("userName").value,
+        password: document.getElementById("password").value
+      };
+      try {
+        const response = await fetch("http://localhost:8081/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          alert("Registration successful!");
+          const responseData=await response.json();
+          const token=responseData.token;
+          console.log(localStorage.setItem("token",token));
+          console.log(token);
+
+          console.log(responseData);
+         // form.reset(); // clear form
+        } else {
+          const errorText = await response.text();
+          alert("Error: " + errorText);
+        }
+      } catch (err) {
+        console.error("Request failed:", err);
+        alert("Something went wrong!");
+      }
+    });
+  </script>
+</body>
+</html>
+
