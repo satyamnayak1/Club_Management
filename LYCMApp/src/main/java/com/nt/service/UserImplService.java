@@ -47,6 +47,8 @@ import com.nt.entity.FundTransaction;
 import com.nt.entity.User;
 import com.nt.entity.UserPrinciple;
 import com.nt.enums.Role;
+import com.nt.exception.UserNameIsAlreadyAvailable;
+import com.nt.exception.UserNotFoundException;
 import com.nt.mapper.IUserMapper;
 import com.nt.repository.IFundRepository;
 import com.nt.repository.ITransactionRepository;
@@ -86,17 +88,15 @@ public class UserImplService implements IUserMgmtService {
 	@Override
 	public UserResponseDto registerUser(UserRegisterDto registerDto) {
 		
-		    Optional<User> opt = userRepo.findByUserName(registerDto.getUserName());
-		    
-		    
-
-		    if (opt.isEmpty()) {
-		    	
+		//check user is already exist or not
+		   if(userRepo.existsByUserName(registerDto.getUserName())) {
+			   throw new UserNameIsAlreadyAvailable("User registration field");
+		   }
+		    	//converting to user
 		    	 User user = mapper.toEntity(registerDto);
 		    	 
 		    	    System.out.println(mapper.toEntity(registerDto));
 		    	 
-		           // user.setUserId(generateUserId());
 		            user.setPassword(encoder.encode(registerDto.getPassword()));
 
 		            // Always give USER role
@@ -106,8 +106,8 @@ public class UserImplService implements IUserMgmtService {
 		            if ("Secrate123".equals(registerDto.getSecretId())) {
 		                user.getRoles().add(Role.ADMIN);
 		            }
+		            
 		            //System.out.println(opt.get());
-
 				    User savedUser = userRepo.save(user);
 				    System.out.println(savedUser);
 				    
@@ -116,30 +116,18 @@ public class UserImplService implements IUserMgmtService {
 				    System.out.println(mapper.toDto(savedUser));
 				    
 				    return mapper.toDto(savedUser);
-		       
-		    }else {
-		    	 throw new IllegalArgumentException("Username already exists");
-		    }
-
-		   
+   
 		}
-
-//    private String generateUserId() {
-//		    return "U" + UUID.randomUUID().toString()
-//		            .replace("-", "")
-//		            .substring(0, 8)
-//		            .toUpperCase();
-//		}
 
 	@Override
 	public UserResponseDto addMember(AdminCreateDto adminDto) {
 		
+		if(userRepo.existsByUserName(adminDto.getUserName())) {
+			throw new UserNameIsAlreadyAvailable("User registration field");
+		}
 		
        User user = mapper.toEntity(adminDto);
-        
-        // ❌ No need for manual ID generation!
-        // user.setUserId(generateUserId());
-        
+             
         user.setPassword(encoder.encode(adminDto.getPassword()));
         user.getRoles().add(Role.USER);
         
@@ -147,11 +135,8 @@ public class UserImplService implements IUserMgmtService {
 //            user.getRoles().add(Role.ADMIN);
 //        }
         
-        // @PrePersist automatically handles ID generation
         User savedUser = userRepo.save(user);
-        return mapper.toDto(savedUser);
-		
-		
+        return mapper.toDto(savedUser);			
 	}
 
 	@Override
@@ -178,9 +163,9 @@ public class UserImplService implements IUserMgmtService {
 	@Transactional
 	@Override
 	public UserResponseDto updateMember(AdminUpdateDto updateDto,String userId) {
-		
+		//check user is available or not
 		User existingUser = userRepo.findById(userId)
-		        .orElseThrow(() -> new IllegalArgumentException("User not found: " + userId));
+		        .orElseThrow(() -> new UserNotFoundException("User not found"));
 		
 		// Update userName if provided
 	    if (updateDto.getUserName() != null && !updateDto.getUserName().trim().isEmpty()) {
@@ -190,7 +175,7 @@ public class UserImplService implements IUserMgmtService {
 	    if (updateDto.getName() != null && !updateDto.getName().trim().isEmpty()) {
             existingUser.setName(updateDto.getName().trim());
         }
-
+	    
 //        if (updateDto.getFatherName() != null && !updateDto.getFatherName().trim().isEmpty()) {
 //            existingUser.setFatherName(updateDto.getFatherName().trim());
 //        }
@@ -486,13 +471,6 @@ public class UserImplService implements IUserMgmtService {
 //        return transactions.map(mapper::toDto);
 //    }
 
-
-	
-	
-	
-	
-	
-  
 
 }
 		

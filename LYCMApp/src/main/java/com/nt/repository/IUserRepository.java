@@ -10,11 +10,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.nt.entity.User;
 
 public interface IUserRepository extends JpaRepository<User, String> {
-	@Query("SELECT u FROM User u WHERE userName=:userName")
-	public Optional<User> findByUserName(@Param ("userName") String userName);
 	
+	public Optional<User> findByUserName(String username);
 	
-	
-	
-	
+	public boolean existsByUserName(String username);
 }
