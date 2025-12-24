@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 import com.nt.exception.ApiError;
+import com.nt.exception.FundIsNotAvailableException;
+import com.nt.exception.InsufficientFundException;
+import com.nt.exception.InvalidAmountException;
 import com.nt.exception.UserNameIsAlreadyAvailable;
 import com.nt.exception.UserNotFoundException;
 
@@ -46,6 +49,34 @@ public class LYCMAppErrorHandler {
 		
 		return new ResponseEntity<ApiError>(error,HttpStatus.CONFLICT);
 		
+	}
+	
+	@ExceptionHandler(InvalidAmountException.class)
+	public ResponseEntity<ApiError> invalinAmount(InvalidAmountException ex,WebRequest request){
+		String path=request.getDescription(false).substring(3);
+		System.out.println(path);
+		
+        ApiError error=new ApiError(HttpStatus.BAD_REQUEST,ex.getMessage(),List.of("Amount should be more than 0"),path);		
+		return new ResponseEntity<ApiError>(error,HttpStatus.BAD_REQUEST);
+		
+	}
+	
+	@ExceptionHandler(InsufficientFundException.class)
+	public ResponseEntity<ApiError> insufficientFund(InsufficientFundException ex,WebRequest req){
+		
+		String path=req.getDescription(false).substring(3);
+		
+		ApiError error=new ApiError(HttpStatus.BAD_REQUEST,ex.getMessage(),List.of("Balance is more than available"), path);
+		
+		return new ResponseEntity<ApiError>(error,HttpStatus.BAD_REQUEST);		
+	}
+	
+	@ExceptionHandler(FundIsNotAvailableException.class)
+	public ResponseEntity<ApiError> noFundAvailable(FundIsNotAvailableException ex,WebRequest request){	
+		String path=request.getDescription(false).substring(3);
+		ApiError error=new ApiError(HttpStatus.BAD_REQUEST,ex.getMessage(),List.of("Fund is not created"), path);
+		
+		return new ResponseEntity<ApiError>(error,HttpStatus.BAD_REQUEST);
 	}
 
 }

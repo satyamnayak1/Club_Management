@@ -1,6 +1,5 @@
 package com.nt.service;
 
-import java.util.List;
 import java.util.Map;
 import com.nt.dto.AdminCreateDto;
 import com.nt.dto.AdminUpdateDto;
@@ -9,7 +8,6 @@ import com.nt.dto.FundResponseDto;
 import com.nt.dto.LoginDto;
 import com.nt.dto.PageResponseDto;
 import com.nt.dto.TransactionDetailsDto;
-import com.nt.dto.TransactionDto;
 import com.nt.dto.UserDeleteDto;
 import com.nt.dto.UserRegisterDto;
 import com.nt.dto.UserResponseDto;
@@ -42,13 +40,9 @@ public interface IUserMgmtService {
 
 	UserResponseDto addMember(AdminCreateDto adminDto);
 	
-	
-
 	public Map<String,Object> loginAsGuest(HttpServletRequest request);
 
 	public UserResponseDto getProfile(String name);
-
-	public List<TransactionDto> findAllTransaction();
 
 	public FundResponseDto getTheFundDetail();
 

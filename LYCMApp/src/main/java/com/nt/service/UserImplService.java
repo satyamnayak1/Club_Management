@@ -47,6 +47,9 @@ import com.nt.entity.FundTransaction;
 import com.nt.entity.User;
 import com.nt.entity.UserPrinciple;
 import com.nt.enums.Role;
+import com.nt.exception.FundIsNotAvailableException;
+import com.nt.exception.InsufficientFundException;
+import com.nt.exception.InvalidAmountException;
 import com.nt.exception.UserNameIsAlreadyAvailable;
 import com.nt.exception.UserNotFoundException;
 import com.nt.mapper.IUserMapper;
@@ -220,14 +223,15 @@ public class UserImplService implements IUserMgmtService {
 	    // Get the userId directly from the principal
 	    String userId = userPrinciple.getUserId();
 		
+	    //checking user is existed or not
 	    User existingUser = userRepo.findById(userId)
-	            .orElseThrow(() -> new IllegalArgumentException("User not found"));
+	            .orElseThrow(() -> new UserNotFoundException("User not found"));
 	    
         if(updateDto.getUserName()!=null && !existingUser.getUserName().equals(updateDto.getUserName())) {
 	    	existingUser.setUserName(updateDto.getUserName());
 	    }
         else {
-        	throw new IllegalArgumentException("User name already exist");
+        	throw new UserNameIsAlreadyAvailable("User updation field") ;
         }
         if (updateDto.getName() != null && !updateDto.getName().trim().isEmpty()) {
             existingUser.setName(updateDto.getName().trim());
@@ -267,16 +271,14 @@ public class UserImplService implements IUserMgmtService {
 	@Override
 	public UserDeleteDto deleteMember(String userId) {
 		
+		//check user is exist or not
 	    User existingUser = userRepo.findById(userId)
-	            .orElseThrow(() -> new IllegalArgumentException("User not found"));
-
-	    
+	            .orElseThrow(() -> new UserNotFoundException("User not found"));
 
 	    userRepo.delete(existingUser);
 	    return new UserDeleteDto("Member deleted successfully",
 	            existingUser.getUserId(),
-	            existingUser.getName());
-	    
+	            existingUser.getName());	    
 	}
 	
 	@Transactional
@@ -284,7 +286,7 @@ public class UserImplService implements IUserMgmtService {
     public FundResponseDto performTransaction(FundAddDto dto) {
 
         if (dto.getAmount() == null || dto.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Amount must be greater than 0");
+            throw new InvalidAmountException("Invalid amount");
         }
 
         // Load or create fund
@@ -300,7 +302,7 @@ public class UserImplService implements IUserMgmtService {
             case DEPOSITE -> fund.setAmount(fund.getAmount().add(dto.getAmount()));
             case WITHDRAW, REVERSE -> {
                 if (fund.getAmount().compareTo(dto.getAmount()) < 0)
-                    throw new IllegalArgumentException("Insufficient fund");
+                    throw new InsufficientFundException("Insufficient fund");
                 fund.setAmount(fund.getAmount().subtract(dto.getAmount()));
             }
             default -> throw new IllegalArgumentException("Invalid transaction type");
@@ -312,7 +314,7 @@ public class UserImplService implements IUserMgmtService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserPrinciple userPrinciple = (UserPrinciple) authentication.getPrincipal();
         User admin = userRepo.findById(userPrinciple.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
 
         // Create transaction
         FundTransaction txn = new FundTransaction();
@@ -329,17 +331,7 @@ public class UserImplService implements IUserMgmtService {
                 .stream()
                 .map(mapper::toDto)
                 .toList();
-        
-//        try {
-//        	sendMail(dto.getAmount(),dto.getType());
-//        	
-//        }catch(Exception e) {
-//        	
-//        }
-        
-        
-        
-        
+                 
         return new FundResponseDto(fund.getAmount(), lastTxns);
     }
 	
@@ -373,7 +365,7 @@ public class UserImplService implements IUserMgmtService {
     public FundResponseDto getTheFundDetail() {
 
         Fund fund = fundRepo.loadTheFund()
-                .orElseThrow(() -> new IllegalStateException("No fund available"));
+                .orElseThrow(() -> new FundIsNotAvailableException("Fund is not available"));
 
         List<TransactionDto> lastTxns = transactionRepo.findTop5ByOrderByCreatedAtDesc()
                 .stream()
@@ -395,8 +387,7 @@ public class UserImplService implements IUserMgmtService {
 		Authentication authentication=authManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUserName(), loginDto.getPassword()));
 		
 		if(!authentication.isAuthenticated()) {
-			
-			
+					
 			throw new IllegalArgumentException("Invalid username or password");
 			
 		}	
@@ -433,17 +424,14 @@ public class UserImplService implements IUserMgmtService {
 
 	@Override
 	public UserResponseDto getProfile(String name) {
+		
 		Optional<User> opt=userRepo.findByUserName(name);
+		
 		if(opt.isEmpty()) {
 			throw new IllegalArgumentException("Invalid User");
 		}
+		
 		return mapper.toDto(opt.get());
-	}
-
-	@Override
-	public List<TransactionDto> findAllTransaction() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
