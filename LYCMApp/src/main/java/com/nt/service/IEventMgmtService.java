@@ -6,8 +6,8 @@ import com.nt.dto.EventResponseDto;
 
 public interface IEventMgmtService {
 	
-	public EventResponseDto addEvent(EventCreateDto eventDto);
-
-	String registerEvent(EventRegistrionDto registrationDto);
+//	public EventResponseDto addEvent(EventCreateDto eventDto);
+//
+//	String registerEvent(EventRegistrionDto registrationDto);
 
 }

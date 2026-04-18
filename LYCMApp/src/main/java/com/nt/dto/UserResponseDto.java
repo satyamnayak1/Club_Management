@@ -9,15 +9,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserResponseDto {
 	
-	private String userName;
-	
 	private String email;
 	
     private String name;
     
     private String mobileNo;
-    
-    private String dob;
+
 	
 
 }

@@ -1,5 +1,6 @@
 package com.nt.entity;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -7,95 +8,96 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.stereotype.Indexed;
+
 import com.nt.enums.Role;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name="MEMBER_INFO")
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@EntityListeners(AuditingEntityListener.class)
+@Table(name="member_info",indexes = {
+		@Index(name="idx_email",columnList ="email"),
+		@Index(name="idx_name",columnList = "name")
+})
 public class User {
-	
-	@Override
-	public String toString() {
-		return "User [userId=" + userId + ", userName=" + userName + ", name=" + name + ", fatherName=" + fatherName
-				+ ", password=" + password + ", mobileNo=" + mobileNo + ", dob=" + dob + ", email=" + email
-				+ ", address=" + address + ", roles=" + roles + "]";
-	}
-
 
 	@Id
-	@Column(name="USER_ID",length=60)
-	private String userId;
+	@Column(name="user_id")
+	@GeneratedValue(generator = "gen1",strategy = GenerationType.SEQUENCE)
+	private Long userId;
 	
-	@Column(name="USER_NAME",length=60,unique = true)
-	private String userName;
-	
-	@Column(name="NAME",length=60)
-	private String name;
-	
-	@Column(name="FATHER_NAME",length=60)
-	private String fatherName;
-	
-	@Column(name="PASSWORD",length=60)
-	private String password;
-	
-	@Column(name="MOBILE_NO")
-	private String mobileNo;
-	
-	@Column(name="DOB",length=60)
-	private LocalDate dob;
-	
-	@Column(name="EMAIL",length=60)
+	@Column(name="email",nullable = false,unique = true)
 	private String email;
 	
-	@Column(name="ADDRESS",length=60)
+	@Column(name="password")
+	private String password;
+	
+	@Column(name="name")
+	private String name;
+	
+	@Column(name="father_name")
+	private String fathername;
+	
+	@Column(name="mobile_no",unique=true)
+	private String mobileNo;
+	
+	@Column(name="date_of_birth")
+	private LocalDate dob;
+	
+	@Column(name="address")
 	private String address;
 	
-	@Column(name="VERSION")
+	@CreatedDate
+	@Column(name="created_at",nullable = false,updatable = false)
+	private Instant createdAt;
+	
+	@LastModifiedDate
+	@Column(name="updated_at",nullable= false)
+	private Instant updatedAt;
+	
+	@Column(name="version")
 	@Version
 	private Long version;
 	
-	@ElementCollection(fetch = FetchType.EAGER)
-    @Enumerated(EnumType.STRING)
-    private Set<Role> roles = new HashSet<>();
+	private boolean isEnabled;
 	
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(name = "user_role",
+	joinColumns = @JoinColumn(name="user_id"),
+	inverseJoinColumns = @JoinColumn(name="role_id"))
+	private Set<RoleEntity> role=new HashSet<>();
 	
-	@OneToMany(mappedBy = "admin")
-	private List<FundTransaction> transaction=new ArrayList<>();
-	
-//	@OneToMany(mappedBy = "user")
-//	private List<FundTransaction> event=new ArrayList<>();
-	
-	 @PrePersist
-	    public void onPrePersist() {
-	        // Set the creation date to the current time, automatically
-	        
-	        
-	        // Generate a custom ID if it's null
-	        if (this.userId == null) {
-	            this.userId = "F" + UUID.randomUUID().toString()
-	                                           .replace("-", "")
-	                                           .substring(0, 8)
-	                                           .toUpperCase();
-	        }
-	    }
-
 }

@@ -13,6 +13,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.nt.service.JwtService;
 import com.nt.service.MyUserDetailService;
 
 import io.jsonwebtoken.Claims;
@@ -20,13 +21,15 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 @Component
+@RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
-	@Autowired
-	private JwtService jwtService;
-	@Autowired
-	private MyUserDetailService myUserDetailService;
+	
+	private final JwtService jwtService;
+	
+	private final MyUserDetailService myUserDetailService;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -42,30 +45,7 @@ public class JwtFilter extends OncePerRequestFilter {
 		}
 		
 		if(userName != null && SecurityContextHolder.getContext().getAuthentication()== null ) {
-			Claims claims = jwtService.extractAllClaims(token);
-            List<String> roles = (List<String>) claims.get("role");
-
-            if (roles.contains("GUEST")) {
-                // ✅ Create Guest authentication without hitting DB
-            	
-            	
-            	System.out.println("Guest JWT roles: " + roles);
-            	System.out.println("UserName from token: " + userName);
-
-                UserDetails guestUser =User.withUsername(userName)
-
-                        .password("") // no password
-                        .authorities(new SimpleGrantedAuthority("ROLE_GUEST"))
-                        .build();
-
-                UsernamePasswordAuthenticationToken authToken =
-                        new UsernamePasswordAuthenticationToken(guestUser, null, guestUser.getAuthorities());
-
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
-
-            } 
-		    else {
+			
 		        // Normal user → validate against DB
 		        UserDetails userDetails = myUserDetailService.loadUserByUsername(userName);
 		        if (jwtService.validateToken(token, userDetails)) {
@@ -74,10 +54,7 @@ public class JwtFilter extends OncePerRequestFilter {
 		            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 		            SecurityContextHolder.getContext().setAuthentication(authToken);
 		        }
-			
-			
-			
-		}
+
 		}
 		filterChain.doFilter(request, response);
 	}

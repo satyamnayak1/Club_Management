@@ -9,9 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.nt.entity.User;
 
-public interface IUserRepository extends JpaRepository<User, String> {
+public interface IUserRepository extends JpaRepository<User,Long> {
 	
-	public Optional<User> findByUserName(String username);
+	public boolean existsByEmail(String email);
 	
-	public boolean existsByUserName(String username);
+	public Optional<User> findByEmail(String email);
 }
