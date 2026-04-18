@@ -1,12 +1,10 @@
 package com.nt.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -19,42 +17,30 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import com.nt.security.JwtFilter;
 import com.nt.service.MyUserDetailService;
+
+import lombok.RequiredArgsConstructor;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 	
-	@Autowired
-	private JwtFilter jwtFilter;
+	
+	private final JwtFilter jwtFilter;
+	
+	private final MyUserDetailService myUserDetailService;
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 		
 		http.csrf(csrf->csrf.disable())
-		.formLogin(form -> form.disable())
 		.authorizeHttpRequests(auth->
-			auth
-			.requestMatchers(
-                    "/login.html",
-                    "/register.html",
-                    "/dashboard.html",
-                    "/add-member.html",
-                    "/update-member.html",
-                    "/fund.html",
-                    "/transaction.html",
-                    "/show.html",
-                    "/css/**",
-                    "/js/**")
-            .permitAll()
-			.requestMatchers("/register","/login","/guest","/transaction").permitAll()
-			.requestMatchers("/showfund").permitAll()
-			.requestMatchers("/update").hasAnyRole("ADMIN","USER")
-			.requestMatchers("/fund").hasAnyRole("ADMIN","USER","GUEST")
-			.anyRequest().authenticated()
+			auth.requestMatchers("/login").permitAll()
 			
 		)//.httpBasic(Customizer.withDefaults())
-		.addFilterBefore(jwtFilter,UsernamePasswordAuthenticationFilter.class).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-		
+		.addFilterBefore(jwtFilter,UsernamePasswordAuthenticationFilter.class)
+		.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+	
 		return http.build();
 		
 	}
@@ -63,8 +49,7 @@ public class SecurityConfig {
 	@Bean
 	public AuthenticationProvider authenticationProvider(MyUserDetailService userDetailService,PasswordEncoder encoder) {
 		
-		DaoAuthenticationProvider provider =new DaoAuthenticationProvider(userDetailService);
-		
+		DaoAuthenticationProvider provider =new DaoAuthenticationProvider();
 		provider.setUserDetailsService(userDetailService);
 		provider.setPasswordEncoder(encoder);
 		
@@ -73,10 +58,8 @@ public class SecurityConfig {
 	}
 	
 	@Bean
-	public AuthenticationManager authManager(AuthenticationConfiguration config) throws Exception {
-		
-		return config.getAuthenticationManager();
-		
+	public AuthenticationManager authManager(AuthenticationConfiguration config) throws Exception {	
+		return config.getAuthenticationManager();	
 	}
 	
 	

@@ -1,27 +1,41 @@
-package com.nt.security;
+package com.nt.service;
 
 import java.security.NoSuchAlgorithmException;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.nt.entity.RefreshToken;
+import com.nt.entity.RoleEntity;
+import com.nt.entity.User;
 import com.nt.enums.Role;
+import com.nt.repository.RefreshTokenRepository;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 
 @Service
+
 public class JwtService {
+	@Autowired
+	private RefreshTokenRepository refreshTokenRepository;
+	
 	
     private String secrateKey;
 	
@@ -36,27 +50,23 @@ public class JwtService {
 		}
 	}
 
-	public String generateToken(String userName,Set<Role> roles,String userId) {
+	public String generateAccessToken(User user) {
 		
-		
-		Map<String, Object> claims=new HashMap<>();
-		
-		claims.put("role", roles.stream().map(Role::name).toList());
-		claims.put("userId", userId);
+		List<String> role=user.getRole().stream().map(roles->roles.getName().name()).toList();
+		Instant now=Instant.now();
 		
 		return Jwts.builder()
-				.claims()
-				.add(claims)
-				.subject(userName)
-				.issuedAt(new Date(System.currentTimeMillis()))
-				.expiration(new Date(System.currentTimeMillis()+1000 * 60 * 60 * 30))
-				.and()
+				.subject(user.getEmail())
+				.claims(Map.of(
+						"userId",user.getUserId(),
+						"roles",role,
+						"typ","access"
+						))
+				.issuedAt(Date.from(now))
+				.expiration(Date.from(now.plus(5,ChronoUnit.MINUTES)))
 				.signWith(getKey())
-				.compact()
-				;
-		
-		
-		
+				.compact();
+
 	}
 	private SecretKey getKey() {
 		byte [] keyBytes=Decoders.BASE64.decode(secrateKey);
@@ -98,5 +108,30 @@ public class JwtService {
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
+
+	public String generateRefreshToken(User user) {
+		//create refresh token object
+		String jti=UUID.randomUUID().toString();
+		Instant now=Instant.now();
+		RefreshToken refreshToken=RefreshToken.builder()
+				.jti(jti)
+				.user(user)
+				.createdAt(now)
+				.expiresAt(now.plus(5, ChronoUnit.HOURS))
+				.build();
+		
+		//save the refresh token for to validate
+		RefreshToken token=refreshTokenRepository.save(refreshToken);
+		
+		//creating refresh token			
+		return Jwts.builder()
+				.id(jti)
+				.subject(token.getId().toString())
+				.issuedAt(Date.from(now))
+				.expiration(Date.from(now.plus(5,ChronoUnit.HOURS)))
+				.signWith(getKey())
+				.claim("typ","refresh")
+				.compact();
+	}
 
 }

@@ -1,17 +1,17 @@
 package com.nt.entity;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
-
+import java.util.List;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Component
+@Slf4j
 public class UserPrinciple implements UserDetails {
-	
-	
-   
-
 	
     private User user;
 	
@@ -24,25 +24,29 @@ public class UserPrinciple implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		
-		return user.getRoles().stream()
-	            .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
-	            .collect(Collectors.toSet());
+		List<SimpleGrantedAuthority> list=user.getRole().stream().map(role-> new SimpleGrantedAuthority(role.getName().name())).toList();
+		log.info("All the roles list {}",list);
+		return list;
+		
+		//user.getRoles().stream()
+//	            .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))
+//	            .collect(Collectors.toSet());
 	}
 
 	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
+		
 		return user.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
-		// TODO Auto-generated method stub
-		return user.getUserName();
+		
+		return user.getEmail();
 	}
 	
-	public String getUserId() {
-		return user.getUserId();
+	public User getUser() {
+		return user;
 	}
 	
 	@Override
@@ -55,6 +59,6 @@ public class UserPrinciple implements UserDetails {
     public boolean isCredentialsNonExpired() { return true; }
 
     @Override
-    public boolean isEnabled() { return true; }
+    public boolean isEnabled() { return user.isEnabled(); }
 
 }
