@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "ROLES")
+@Table(name = "role")
 @AllArgsConstructor
 @RequiredArgsConstructor
 @Getter
@@ -28,8 +28,7 @@ import lombok.Setter;
 @EqualsAndHashCode(of = "name") 
 public class RoleEntity {
 	@Id
-	@SequenceGenerator(name = "gen1",sequenceName = "role_seq",initialValue = 1,allocationSize = 1)
-	@GeneratedValue(generator = "gen1",strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
 	@Column(unique = true)

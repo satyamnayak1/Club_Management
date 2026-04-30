@@ -49,14 +49,13 @@ import lombok.Setter;
 @Builder
 @EntityListeners(AuditingEntityListener.class)
 @Table(name="member_info",indexes = {
-		@Index(name="idx_email",columnList ="email"),
 		@Index(name="idx_name",columnList = "name")
 })
 public class User {
 
 	@Id
 	@Column(name="user_id")
-	@GeneratedValue(generator = "gen1",strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long userId;
 	
 	@Column(name="email",nullable = false,unique = true)
@@ -91,6 +90,8 @@ public class User {
 	@Column(name="version")
 	@Version
 	private Long version;
+
+	private boolean isGuest=false;
 	
 	private boolean isEnabled;
 	

@@ -1,71 +1,15 @@
 package com.nt.service;
-
-
-
-import java.math.BigDecimal;
-import java.util.HashMap;
-
-//import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.UUID;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import com.nt.dto.AdminCreateDto;
-import com.nt.dto.AdminUpdateDto;
-import com.nt.dto.FundAddDto;
-import com.nt.dto.FundResponseDto;
-import com.nt.dto.LoginDto;
-import com.nt.dto.PageResponseDto;
-import com.nt.dto.TransactionDetailsDto;
-import com.nt.dto.TransactionDto;
-import com.nt.dto.UserDeleteDto;
 import com.nt.dto.UserRegisterDto;
 import com.nt.dto.UserResponseDto;
-import com.nt.dto.UserUpdateDto;
-import com.nt.entity.Fund;
-import com.nt.entity.FundTransaction;
 import com.nt.entity.RoleEntity;
 import com.nt.entity.User;
-import com.nt.entity.UserPrinciple;
 import com.nt.enums.Role;
-import com.nt.exception.FundIsNotAvailableException;
-import com.nt.exception.InsufficientFundException;
-import com.nt.exception.InvalidAmountException;
-import com.nt.exception.UserNameIsAlreadyAvailable;
-import com.nt.exception.UserNotFoundException;
-
-import com.nt.repository.IFundRepository;
 import com.nt.repository.IRoleRepository;
-import com.nt.repository.ITransactionRepository;
 import com.nt.repository.IUserRepository;
-import com.nt.security.JwtService;
-
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 
@@ -99,15 +43,21 @@ public class UserImplService implements IUserMgmtService {
 		  user.setName(registerDto.getName());
 		  user.setPassword(encoder.encode(registerDto.getPassword())); 
 		  user.setMobileNo(registerDto.getMobileNo());
+		  user.setEnabled(true);
 		  user.getRole().add(role);
 		  
 		  //save the user in the database
 		  User saveUser=userRepo.save(user);
 		  
 		 //return the register user	
-	     return new UserResponseDto(saveUser.getEmail(),saveUser.getName(),saveUser.getMobileNo());
+	     return new UserResponseDto(saveUser.getEmail(),saveUser.getName(),saveUser.getMobileNo(),saveUser.getRole().stream().map(rele->role.getName().name()).toList());
    
 		}
+
+	@Override
+	public List<User> getAll() {
+		return userRepo.findAll();
+	}
 
 //	@Override
 //	public UserResponseDto addMember(AdminCreateDto adminDto) {

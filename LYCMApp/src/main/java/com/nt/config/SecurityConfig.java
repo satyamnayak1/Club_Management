@@ -1,5 +1,6 @@
 package com.nt.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,19 +26,20 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 	
-	
-	private final JwtFilter jwtFilter;
-	
-	private final MyUserDetailService myUserDetailService;
+	@Autowired
+	private JwtFilter jwtFilter;
+
+	@Autowired
+	private MyUserDetailService myUserDetailService;
 	
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 		
 		http.csrf(csrf->csrf.disable())
-		.authorizeHttpRequests(auth->
-			auth.requestMatchers("/login").permitAll()
-			
-		)//.httpBasic(Customizer.withDefaults())
+		.authorizeHttpRequests(auth-> {
+			auth.requestMatchers("/login", "/refresh","guest").permitAll()
+					.anyRequest().authenticated();
+		})//.httpBasic(Customizer.withDefaults())
 		.addFilterBefore(jwtFilter,UsernamePasswordAuthenticationFilter.class)
 		.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 	
